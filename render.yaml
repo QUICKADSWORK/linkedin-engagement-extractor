@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: linkedin-engagement-extractor
+    env: python
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: RAPIDAPI_KEY
+        sync: false
+      - key: DEMO_MODE
+        value: "False"
+      - key: FLASK_DEBUG
+        value: "False"
+

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Engagement Extractor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <h1>Engagement Extractor</h1>
+            </div>
+            <p class="tagline">Extract valuable connections from LinkedIn post engagement</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="input-card">
+                    <h2>Enter LinkedIn Post URL</h2>
+                    <p class="instruction">Paste a LinkedIn post URL to extract profile links from reactions and comments</p>
+                    
+                    <form id="extractForm" class="extract-form">
+                        <div class="input-wrapper">
+                            <input 
+                                type="url" 
+                                id="postUrl" 
+                                name="postUrl" 
+                                placeholder="https://www.linkedin.com/posts/..." 
+                                required
+                                autocomplete="off"
+                            >
+                            <div class="input-border"></div>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <span class="btn-text">Extract Profiles</span>
+                            <span class="btn-loader">
+                                <svg class="spinner" viewBox="0 0 24 24">
+                                    <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke-width="3"/>
+                                </svg>
+                            </span>
+                        </button>
+                    </form>
+
+                    <div class="supported-formats">
+                        <span class="format-label">Supported formats:</span>
+                        <div class="format-tags">
+                            <span class="tag">linkedin.com/posts/...</span>
+                            <span class="tag">linkedin.com/feed/update/...</span>
+                            <span class="tag">linkedin.com/pulse/...</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Status/Error Messages -->
+            <section class="message-section" id="messageSection" style="display: none;">
+                <div class="message" id="messageBox">
+                    <span class="message-icon"></span>
+                    <span class="message-text"></span>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <div class="results-title">
+                        <h2>Extracted Profiles</h2>
+                        <div class="stats">
+                            <span class="stat" id="totalCount">
+                                <span class="stat-value">0</span>
+                                <span class="stat-label">Total</span>
+                            </span>
+                            <span class="stat" id="reactionCount">
+                                <span class="stat-value">0</span>
+                                <span class="stat-label">Reactions</span>
+                            </span>
+                            <span class="stat" id="commentCount">
+                                <span class="stat-value">0</span>
+                                <span class="stat-label">Comments</span>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="action-btn" id="downloadCsvBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            Download CSV
+                        </button>
+                        <button class="action-btn secondary" id="copyAllBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                            </svg>
+                            Copy All URLs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter/Search -->
+                <div class="filter-bar">
+                    <div class="search-wrapper">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <input type="text" id="searchInput" placeholder="Search profiles...">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="reaction">Reactions</button>
+                        <button class="filter-btn" data-filter="comment">Comments</button>
+                    </div>
+                </div>
+
+                <!-- Results Table -->
+                <div class="results-table-wrapper">
+                    <table class="results-table" id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th class="col-avatar"></th>
+                                <th class="col-name">Name</th>
+                                <th class="col-headline">Headline</th>
+                                <th class="col-type">Type</th>
+                                <th class="col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody">
+                            <!-- Results will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M8 15s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/>
+                    </svg>
+                    <p>No profiles match your filter</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Extract engagement data responsibly. Respect LinkedIn's terms of service.</p>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-message"></span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
