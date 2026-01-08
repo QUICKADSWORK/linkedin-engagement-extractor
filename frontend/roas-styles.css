@@ -120,6 +120,271 @@ body::before {
     gap: 2rem;
 }
 
+/* Two Column Layout */
+.content-wrapper {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+/* Educational Section (Left Column) */
+.education-section {
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.education-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.education-section::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 3px;
+}
+
+.education-section::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+/* Table of Contents */
+.table-of-contents {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.table-of-contents h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.table-of-contents ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.table-of-contents li {
+    margin-bottom: 0.75rem;
+}
+
+.table-of-contents a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.table-of-contents a:hover {
+    color: var(--primary-color);
+    background: var(--bg-secondary);
+    padding-left: 1rem;
+}
+
+/* Education Content */
+.education-content {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+.intro-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+}
+
+.content-section {
+    margin-bottom: 3rem;
+    scroll-margin-top: 2rem;
+}
+
+.content-section h2 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.content-section h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.content-section p {
+    margin-bottom: 1rem;
+}
+
+.content-section strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.content-section code {
+    background: rgba(139, 92, 246, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: var(--primary-color);
+}
+
+/* Formula Box */
+.formula-box {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.formula-box code {
+    font-size: 1.125rem;
+    font-weight: 700;
+    background: none;
+    color: var(--primary-color);
+}
+
+/* Callout Boxes */
+.callout-box {
+    padding: 1.25rem;
+    border-radius: var(--border-radius);
+    margin: 1.5rem 0;
+    border-left: 4px solid;
+}
+
+.callout-box.warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-left-color: var(--warning-color);
+}
+
+.callout-box.success {
+    background: rgba(16, 185, 129, 0.1);
+    border-left-color: var(--success-color);
+}
+
+.callout-box strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.callout-box p {
+    margin-bottom: 0;
+}
+
+/* Lists */
+.roas-ranges {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.roas-ranges li {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+}
+
+.numbered-list {
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.numbered-list li {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+}
+
+.numbered-list ul {
+    margin-top: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+.factor-list {
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.factor-list li {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+}
+
+.tip {
+    background: rgba(139, 92, 246, 0.1);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-top: 1.5rem;
+    font-size: 0.9375rem;
+}
+
+/* FAQ Items */
+.faq-item {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.faq-item h3 {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.faq-item p {
+    margin-bottom: 0.75rem;
+}
+
+.faq-item ol {
+    padding-left: 1.5rem;
+    margin: 0.75rem 0;
+}
+
+.faq-item li {
+    margin-bottom: 0.5rem;
+}
+
+/* Calculator Column */
+.calculator-column {
+    display: grid;
+    gap: 2rem;
+}
+
 /* Calculator Card */
 .calculator-card {
     background: var(--bg-card);
@@ -763,6 +1028,34 @@ body::before {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .content-wrapper {
+        grid-template-columns: 350px 1fr;
+        gap: 2rem;
+    }
+
+    .education-section {
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .content-wrapper {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .education-section {
+        position: static;
+        max-height: none;
+        order: 2;
+    }
+
+    .calculator-column {
+        order: 1;
+    }
+}
+
 @media (max-width: 768px) {
     body {
         padding: 1rem 0.5rem;
@@ -779,6 +1072,18 @@ body::before {
     .calculator-card,
     .result-card {
         padding: 1.5rem;
+    }
+
+    .education-section {
+        padding: 1.5rem;
+    }
+
+    .table-of-contents h3 {
+        font-size: 1.125rem;
+    }
+
+    .content-section h2 {
+        font-size: 1.125rem;
     }
 
     .score-value {
