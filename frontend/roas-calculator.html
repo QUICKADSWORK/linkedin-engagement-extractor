@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROAS Calculator - Maximize Your Ad Performance</title>
+    <link rel="stylesheet" href="roas-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <nav style="text-align: left; margin-bottom: 1rem;">
+                    <a href="/" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; font-weight: 600; transition: color 0.3s;">
+                        <span style="font-size: 1.25rem;">←</span> Back to LinkedIn Extractor
+                    </a>
+                </nav>
+                <h1 class="title">
+                    <span class="icon">📊</span>
+                    ROAS Calculator
+                </h1>
+                <p class="subtitle">Calculate Return on Ad Spend & Get Actionable Insights</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Calculator Card -->
+            <div class="calculator-card">
+                <div class="card-header">
+                    <h2>Calculate Your ROAS</h2>
+                    <p>Enter your campaign data to get instant insights</p>
+                </div>
+
+                <form id="roasForm" class="calculator-form">
+                    <!-- Currency Selection -->
+                    <div class="form-group currency-group">
+                        <label for="currency">Currency</label>
+                        <div class="select-wrapper">
+                            <select id="currency" name="currency" class="form-select">
+                                <option value="USD" data-symbol="$">🇺🇸 US Dollar (USD)</option>
+                                <option value="EUR" data-symbol="€">🇪🇺 Euro (EUR)</option>
+                                <option value="GBP" data-symbol="£">🇬🇧 UK Pound (GBP)</option>
+                                <option value="INR" data-symbol="₹">🇮🇳 India Rupee (INR)</option>
+                                <option value="AUD" data-symbol="A$">🇦🇺 Australia Dollar (AUD)</option>
+                                <option value="CAD" data-symbol="C$">🇨🇦 Canada Dollar (CAD)</option>
+                                <option value="CHF" data-symbol="CHF">🇨🇭 Switzerland Franc (CHF)</option>
+                                <option value="CNY" data-symbol="¥">🇨🇳 China Yuan (CNY)</option>
+                                <option value="JPY" data-symbol="¥">🇯🇵 Japan Yen (JPY)</option>
+                                <option value="SGD" data-symbol="S$">🇸🇬 Singapore Dollar (SGD)</option>
+                                <option value="NZD" data-symbol="NZ$">🇳🇿 New Zealand Dollar (NZD)</option>
+                                <option value="HKD" data-symbol="HK$">🇭🇰 Hong Kong Dollar (HKD)</option>
+                                <option value="SEK" data-symbol="kr">🇸🇪 Sweden Krona (SEK)</option>
+                                <option value="NOK" data-symbol="kr">🇳🇴 Norway Krone (NOK)</option>
+                                <option value="DKK" data-symbol="kr">🇩🇰 Denmark Krone (DKK)</option>
+                                <option value="PLN" data-symbol="zł">🇵🇱 Poland Zloty (PLN)</option>
+                                <option value="CZK" data-symbol="Kč">🇨🇿 Czech Koruna (CZK)</option>
+                                <option value="HUF" data-symbol="Ft">🇭🇺 Hungary Forint (HUF)</option>
+                                <option value="RON" data-symbol="lei">🇷🇴 Romania Leu (RON)</option>
+                                <option value="TRY" data-symbol="₺">🇹🇷 Turkey Lira (TRY)</option>
+                                <option value="ZAR" data-symbol="R">🇿🇦 South Africa Rand (ZAR)</option>
+                                <option value="BRL" data-symbol="R$">🇧🇷 Brazil Real (BRL)</option>
+                                <option value="MXN" data-symbol="$">🇲🇽 Mexico Peso (MXN)</option>
+                                <option value="AED" data-symbol="د.إ">🇦🇪 UAE Dirham (AED)</option>
+                                <option value="SAR" data-symbol="﷼">🇸🇦 Saudi Riyal (SAR)</option>
+                                <option value="THB" data-symbol="฿">🇹🇭 Thailand Baht (THB)</option>
+                                <option value="MYR" data-symbol="RM">🇲🇾 Malaysia Ringgit (MYR)</option>
+                                <option value="IDR" data-symbol="Rp">🇮🇩 Indonesia Rupiah (IDR)</option>
+                                <option value="PHP" data-symbol="₱">🇵🇭 Philippines Peso (PHP)</option>
+                                <option value="VND" data-symbol="₫">🇻🇳 Vietnam Dong (VND)</option>
+                                <option value="KRW" data-symbol="₩">🇰🇷 South Korea Won (KRW)</option>
+                                <option value="ILS" data-symbol="₪">🇮🇱 Israel Shekel (ILS)</option>
+                                <option value="RUB" data-symbol="₽">🇷🇺 Russia Ruble (RUB)</option>
+                                <option value="UAH" data-symbol="₴">🇺🇦 Ukraine Hryvnia (UAH)</option>
+                            </select>
+                            <span class="select-icon">▼</span>
+                        </div>
+                    </div>
+
+                    <!-- Ad Spend Input -->
+                    <div class="form-group">
+                        <label for="adSpend">
+                            Ad Spend
+                            <span class="tooltip" data-tooltip="Total amount spent on advertising campaigns">ⓘ</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="currency-symbol" id="adSpendSymbol">$</span>
+                            <input type="number" id="adSpend" name="adSpend" class="form-input" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Input -->
+                    <div class="form-group">
+                        <label for="revenue">
+                            Revenue from Ads
+                            <span class="tooltip" data-tooltip="Total revenue generated from your ad campaigns">ⓘ</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="currency-symbol" id="revenueSymbol">$</span>
+                            <input type="number" id="revenue" name="revenue" class="form-input" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Options Toggle -->
+                    <div class="advanced-toggle">
+                        <button type="button" id="advancedToggle" class="toggle-btn">
+                            <span>⚙️ Advanced Options</span>
+                            <span class="toggle-icon">▼</span>
+                        </button>
+                    </div>
+
+                    <!-- Advanced Fields (Hidden by default) -->
+                    <div id="advancedFields" class="advanced-fields">
+                        <div class="form-group">
+                            <label for="profitMargin">
+                                Profit Margin (%)
+                                <span class="tooltip" data-tooltip="Your product profit margin percentage">ⓘ</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="profitMargin" name="profitMargin" class="form-input" placeholder="30" step="0.1" min="0" max="100">
+                                <span class="input-suffix">%</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="conversions">
+                                Number of Conversions
+                                <span class="tooltip" data-tooltip="Total number of conversions from ads">ⓘ</span>
+                            </label>
+                            <input type="number" id="conversions" name="conversions" class="form-input" placeholder="0" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="industry">
+                                Industry
+                                <span class="tooltip" data-tooltip="Select your industry for benchmark comparison">ⓘ</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="industry" name="industry" class="form-select">
+                                    <option value="general">General</option>
+                                    <option value="ecommerce">E-commerce</option>
+                                    <option value="saas">SaaS</option>
+                                    <option value="finance">Finance & Insurance</option>
+                                    <option value="realestate">Real Estate</option>
+                                    <option value="automotive">Automotive</option>
+                                    <option value="education">Education</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="travel">Travel & Hospitality</option>
+                                    <option value="retail">Retail</option>
+                                    <option value="b2b">B2B Services</option>
+                                </select>
+                                <span class="select-icon">▼</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calculate Button -->
+                    <button type="submit" class="btn-calculate">
+                        <span class="btn-text">Calculate ROAS</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Section (Hidden initially) -->
+            <div id="resultsSection" class="results-section" style="display: none;">
+                <!-- ROAS Score Card -->
+                <div class="result-card score-card">
+                    <div class="score-header">
+                        <h3>Your ROAS</h3>
+                        <div class="score-badge" id="scoreBadge">Excellent</div>
+                    </div>
+                    <div class="score-value">
+                        <span class="score-number" id="roasValue">4.5</span>
+                        <span class="score-multiplier">:1</span>
+                    </div>
+                    <p class="score-description" id="scoreDescription">
+                        You're earning $4.50 for every $1 spent on ads
+                    </p>
+                    <div class="score-rating">
+                        <div class="rating-bar">
+                            <div class="rating-fill" id="ratingFill" style="width: 75%"></div>
+                        </div>
+                        <div class="rating-labels">
+                            <span>Poor</span>
+                            <span>Fair</span>
+                            <span>Good</span>
+                            <span>Great</span>
+                            <span>Excellent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Metrics Grid -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">💰</div>
+                        <div class="metric-content">
+                            <h4>Total Revenue</h4>
+                            <p class="metric-value" id="totalRevenue">$0</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">💸</div>
+                        <div class="metric-content">
+                            <h4>Total Ad Spend</h4>
+                            <p class="metric-value" id="totalAdSpend">$0</p>
+                        </div>
+                    </div>
+                    <div class="metric-card" id="profitCard" style="display: none;">
+                        <div class="metric-icon">📈</div>
+                        <div class="metric-content">
+                            <h4>Estimated Profit</h4>
+                            <p class="metric-value" id="estimatedProfit">$0</p>
+                        </div>
+                    </div>
+                    <div class="metric-card" id="cpaCard" style="display: none;">
+                        <div class="metric-icon">🎯</div>
+                        <div class="metric-content">
+                            <h4>Cost Per Acquisition</h4>
+                            <p class="metric-value" id="cpaValue">$0</p>
+                        </div>
+                    </div>
+                    <div class="metric-card" id="breakEvenCard">
+                        <div class="metric-icon">⚖️</div>
+                        <div class="metric-content">
+                            <h4>Break-Even ROAS</h4>
+                            <p class="metric-value" id="breakEvenValue">1.0</p>
+                            <p class="metric-note" id="breakEvenNote"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insights & Recommendations -->
+                <div class="result-card insights-card">
+                    <h3>
+                        <span class="card-icon">💡</span>
+                        Insights & Recommendations
+                    </h3>
+                    <div id="insightsList" class="insights-list">
+                        <!-- Insights will be populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Industry Benchmark -->
+                <div class="result-card benchmark-card" id="benchmarkCard">
+                    <h3>
+                        <span class="card-icon">📊</span>
+                        Industry Benchmark
+                    </h3>
+                    <div class="benchmark-content">
+                        <div class="benchmark-comparison">
+                            <div class="benchmark-item">
+                                <span class="benchmark-label">Your ROAS</span>
+                                <span class="benchmark-value your-roas" id="yourRoasBenchmark">4.5</span>
+                            </div>
+                            <div class="benchmark-divider">vs</div>
+                            <div class="benchmark-item">
+                                <span class="benchmark-label">Industry Average</span>
+                                <span class="benchmark-value industry-roas" id="industryRoasBenchmark">3.0</span>
+                            </div>
+                        </div>
+                        <p class="benchmark-note" id="benchmarkNote"></p>
+                    </div>
+                </div>
+
+                <!-- Action Items -->
+                <div class="result-card actions-card">
+                    <h3>
+                        <span class="card-icon">✅</span>
+                        Action Items
+                    </h3>
+                    <div id="actionsList" class="actions-list">
+                        <!-- Actions will be populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Reset Button -->
+                <button id="resetBtn" class="btn-reset">
+                    Calculate Again
+                </button>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Built with ❤️ to help you maximize your advertising ROI</p>
+        </footer>
+    </div>
+
+    <script src="roas-script.js"></script>
+</body>
+</html>
+

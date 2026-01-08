@@ -22,6 +22,12 @@ def serve_frontend():
     """Serve the frontend HTML"""
     return app.send_static_file('index.html')
 
+
+@app.route('/roas')
+def serve_roas_calculator():
+    """Serve the ROAS calculator page"""
+    return app.send_static_file('roas-calculator.html')
+
 # RapidAPI Configuration
 RAPIDAPI_HOST = "fresh-linkedin-profile-data.p.rapidapi.com"
 RAPIDAPI_KEY = os.environ.get("RAPIDAPI_KEY", "56b6f4dce1mshc3398ebe2b7bdf7p1a8c18jsn91e4f7fa09ae")
@@ -502,6 +508,246 @@ def validate_url():
             'valid': False,
             'message': f'Validation error: {str(e)}'
         }), 500
+
+
+@app.route('/api/calculate-roas', methods=['POST'])
+def calculate_roas():
+    """Calculate ROAS and provide advanced insights"""
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({
+                'success': False,
+                'error': 'Request body is required'
+            }), 400
+        
+        # Extract parameters
+        ad_spend = float(data.get('ad_spend', 0))
+        revenue = float(data.get('revenue', 0))
+        profit_margin = float(data.get('profit_margin', 0))
+        conversions = int(data.get('conversions', 0))
+        industry = data.get('industry', 'general')
+        currency = data.get('currency', 'USD')
+        
+        # Validate inputs
+        if ad_spend <= 0:
+            return jsonify({
+                'success': False,
+                'error': 'Ad spend must be greater than 0'
+            }), 400
+        
+        # Calculate ROAS
+        roas = revenue / ad_spend
+        
+        # Calculate additional metrics
+        profit = None
+        net_profit = None
+        roi = None
+        break_even_roas = 1.0
+        
+        if profit_margin > 0:
+            profit = revenue * (profit_margin / 100)
+            net_profit = profit - ad_spend
+            roi = (net_profit / ad_spend) * 100
+            break_even_roas = 100 / profit_margin
+        
+        cpa = None
+        if conversions > 0:
+            cpa = ad_spend / conversions
+        
+        # Calculate rating
+        rating = get_roas_rating(roas)
+        
+        # Get industry benchmark
+        industry_benchmarks = {
+            'general': 4.0,
+            'ecommerce': 4.5,
+            'saas': 5.0,
+            'finance': 3.5,
+            'realestate': 5.5,
+            'automotive': 3.0,
+            'education': 4.0,
+            'healthcare': 3.5,
+            'travel': 4.0,
+            'retail': 4.5,
+            'b2b': 5.0
+        }
+        
+        industry_benchmark = industry_benchmarks.get(industry, 4.0)
+        
+        # Generate insights
+        insights = generate_roas_insights(roas, revenue, ad_spend, profit_margin, 
+                                         break_even_roas, industry_benchmark)
+        
+        # Generate recommendations
+        recommendations = generate_recommendations(roas, profit_margin, conversions)
+        
+        return jsonify({
+            'success': True,
+            'data': {
+                'roas': round(roas, 2),
+                'rating': rating,
+                'metrics': {
+                    'revenue': revenue,
+                    'ad_spend': ad_spend,
+                    'profit': round(profit, 2) if profit else None,
+                    'net_profit': round(net_profit, 2) if net_profit else None,
+                    'roi': round(roi, 2) if roi else None,
+                    'cpa': round(cpa, 2) if cpa else None,
+                    'break_even_roas': round(break_even_roas, 2),
+                    'conversions': conversions
+                },
+                'benchmark': {
+                    'industry': industry,
+                    'industry_average': industry_benchmark,
+                    'performance_vs_industry': round(((roas - industry_benchmark) / industry_benchmark) * 100, 1)
+                },
+                'insights': insights,
+                'recommendations': recommendations,
+                'currency': currency
+            }
+        })
+        
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': f'Invalid input values: {str(e)}'
+        }), 400
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'An unexpected error occurred: {str(e)}'
+        }), 500
+
+
+def get_roas_rating(roas):
+    """Determine the rating based on ROAS value"""
+    if roas < 1:
+        return {'level': 'Poor', 'color': 'danger', 'score': 1}
+    elif roas < 2:
+        return {'level': 'Fair', 'color': 'warning', 'score': 2}
+    elif roas < 3:
+        return {'level': 'Good', 'color': 'success', 'score': 3}
+    elif roas < 4:
+        return {'level': 'Great', 'color': 'success', 'score': 4}
+    else:
+        return {'level': 'Excellent', 'color': 'success', 'score': 5}
+
+
+def generate_roas_insights(roas, revenue, ad_spend, profit_margin, break_even_roas, industry_benchmark):
+    """Generate insights based on ROAS data"""
+    insights = []
+    
+    # Performance insight
+    if roas >= 4:
+        insights.append({
+            'type': 'success',
+            'title': 'Excellent Performance',
+            'message': f'Your ROAS of {roas:.2f} is outstanding! Your campaigns are highly profitable.'
+        })
+    elif roas >= 2:
+        insights.append({
+            'type': 'success',
+            'title': 'Good Performance',
+            'message': f'Your ROAS of {roas:.2f} is solid with room for optimization.'
+        })
+    elif roas >= 1:
+        insights.append({
+            'type': 'warning',
+            'title': 'Break-Even Performance',
+            'message': f'Your ROAS of {roas:.2f} means you\'re close to break-even. Optimization needed.'
+        })
+    else:
+        insights.append({
+            'type': 'danger',
+            'title': 'Losing Money',
+            'message': f'Your ROAS of {roas:.2f} indicates losses. Immediate action required.'
+        })
+    
+    # Profitability insight
+    if profit_margin > 0:
+        if roas > break_even_roas:
+            insights.append({
+                'type': 'success',
+                'title': 'Profitable After Costs',
+                'message': f'Your ROAS exceeds break-even ({break_even_roas:.2f}). You\'re making profit.'
+            })
+        else:
+            insights.append({
+                'type': 'danger',
+                'title': 'Not Yet Profitable',
+                'message': f'Your ROAS is below break-even ({break_even_roas:.2f}). Not covering costs.'
+            })
+    
+    # Industry comparison
+    if roas > industry_benchmark:
+        diff = ((roas - industry_benchmark) / industry_benchmark) * 100
+        insights.append({
+            'type': 'success',
+            'title': 'Above Industry Average',
+            'message': f'You\'re performing {diff:.1f}% above the industry benchmark.'
+        })
+    elif roas < industry_benchmark:
+        diff = ((industry_benchmark - roas) / industry_benchmark) * 100
+        insights.append({
+            'type': 'warning',
+            'title': 'Below Industry Average',
+            'message': f'You\'re {diff:.1f}% below industry average. Room for improvement.'
+        })
+    
+    # Scaling opportunity
+    if roas >= 3 and roas < 10:
+        insights.append({
+            'type': 'info',
+            'title': 'Scale Opportunity',
+            'message': 'Strong ROAS suggests you can increase budget to capture more revenue.'
+        })
+    elif roas >= 10:
+        insights.append({
+            'type': 'info',
+            'title': 'Untapped Potential',
+            'message': 'Very high ROAS indicates possible under-spending. Consider scaling.'
+        })
+    
+    return insights
+
+
+def generate_recommendations(roas, profit_margin, conversions):
+    """Generate actionable recommendations"""
+    recommendations = []
+    
+    if roas < 2:
+        recommendations.extend([
+            'Review and refine your audience targeting',
+            'A/B test new ad creatives and messaging',
+            'Optimize your landing pages for better conversion',
+            'Consider adjusting your bidding strategy'
+        ])
+    elif roas < 4:
+        recommendations.extend([
+            'Optimize your conversion funnel',
+            'Test new audience segments',
+            'Increase budget on top-performing campaigns'
+        ])
+    else:
+        recommendations.extend([
+            'Scale winning campaigns gradually (20-30% increases)',
+            'Test lookalike audiences to expand reach',
+            'Experiment with new ad formats or channels'
+        ])
+    
+    # Always include monitoring
+    recommendations.append('Set up automated ROAS monitoring and alerts')
+    
+    # Conditional recommendations
+    if not profit_margin or profit_margin == 0:
+        recommendations.append('Track profit margins to understand true profitability')
+    
+    if not conversions or conversions == 0:
+        recommendations.append('Implement conversion tracking to calculate CPA')
+    
+    return recommendations
 
 
 if __name__ == '__main__':
