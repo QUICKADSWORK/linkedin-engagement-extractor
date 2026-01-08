@@ -165,10 +165,8 @@ function displayResults(data) {
     // Generate insights
     generateInsights(data);
     
-    // Show benchmark if industry selected
-    if (industry && industry !== 'general') {
-        displayBenchmark(roas, industry);
-    }
+    // Always show benchmark (will show general if no specific industry selected)
+    displayBenchmark(roas, industry || 'general');
     
     // Generate action items
     generateActionItems(data);
@@ -311,6 +309,8 @@ function displayBenchmark(roas, industry) {
     const industryRoas = INDUSTRY_BENCHMARKS[industry] || INDUSTRY_BENCHMARKS.general;
     
     benchmarkCard.style.display = 'block';
+    
+    // Always update with actual ROAS value
     document.getElementById('yourRoasBenchmark').textContent = roas.toFixed(1);
     document.getElementById('industryRoasBenchmark').textContent = industryRoas.toFixed(1);
     
